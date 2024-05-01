@@ -1,0 +1,126 @@
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.stage.Stage;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
+import java.util.*;
+
+public class NumberManipulatorJavaFX extends Application {
+    private Set<String> seenNumbers = new HashSet<>();
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+        primaryStage.setTitle("NumberManipulator JavaFX");
+
+        // Create a tab pane
+        TabPane tabPane = new TabPane();
+
+        // Create a DeDupe tab
+        Tab deDupeTab = new Tab("DeDupe");
+        deDupeTab.setClosable(false);
+        deDupeTab.setContent(createDeDupeContent());
+
+        // Create a Bad Number Deleter tab
+        Tab badNumDelTab = new Tab("Bad Number Deleter");
+        badNumDelTab.setClosable(false);
+        badNumDelTab.setContent(createBadNumDelContent());
+
+        // Add tabs to the tab pane
+        tabPane.getTabs().addAll(deDupeTab, badNumDelTab);
+
+        Scene scene = new Scene(tabPane, 600, 400);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    private VBox createDeDupeContent() {
+        TextArea inputTextArea = new TextArea();
+        inputTextArea.setPromptText("Enter the list of numbers separated by spaces");
+        inputTextArea.setWrapText(true);
+        TextArea outputTextArea = new TextArea();
+        outputTextArea.setWrapText(true);
+        outputTextArea.setEditable(false);
+        Button deDupeButton = new Button("DeDupe");
+        deDupeButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                String inputText = inputTextArea.getText();
+                String[] numbers = inputText.split("\\s+");
+                List<String> uniqueNumbersList = new ArrayList<>();
+                
+                for (String number : numbers) {
+                    if (!seenNumbers.contains(number)) {
+                        seenNumbers.add(number);
+                        uniqueNumbersList.add(number);
+                    }
+                }
+
+                String uniqueNumbers = String.join(" ", uniqueNumbersList);
+                outputTextArea.setText(uniqueNumbers);
+            }
+        });
+
+        VBox deDupeContent = new VBox(10);
+        deDupeContent.setAlignment(Pos.CENTER);
+        deDupeContent.getChildren().addAll(inputTextArea, deDupeButton, outputTextArea);
+
+        return deDupeContent;
+    }
+
+    private VBox createBadNumDelContent() {
+        TextArea inputTextArea = new TextArea();
+        inputTextArea.setPromptText("Enter Numbers with Notes");
+        inputTextArea.setWrapText(true);
+        TextArea outputTextArea = new TextArea();
+        outputTextArea.setWrapText(true);
+        outputTextArea.setEditable(false);
+        Button badNumDelButton = new Button("Bad Number Deleter");
+        badNumDelButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                String inputText = inputTextArea.getText();
+                String[] lines = inputText.split("\\n");
+                List<String> filteredNumbersList = new ArrayList<>();
+                String[] badWords = {"bad", "wrong"};
+                
+                for (String line : lines) {
+                    String[] parts = line.split(" ", 2);
+                    if (parts.length == 2) {
+                        String phone = parts[0];
+                        String note = parts[1].toLowerCase();
+                        boolean isBad = false;
+                        
+                        for (String badWord : badWords) {
+                            if (note.contains(badWord)) {
+                                isBad = true;
+                                break;
+                            }
+                        }
+                        
+                        if (!isBad) {
+                            filteredNumbersList.add(phone);
+                        }
+                    } else {
+                        filteredNumbersList.add(line);
+                    }
+                }
+                
+                String filteredNumbers = String.join("\n", filteredNumbersList);
+                outputTextArea.setText(filteredNumbers);
+            }
+        });
+
+        VBox badNumDelContent = new VBox(10);
+        badNumDelContent.setAlignment(Pos.CENTER);
+        badNumDelContent.getChildren().addAll(inputTextArea, badNumDelButton, outputTextArea);
+
+        return badNumDelContent;
+    }
+}
