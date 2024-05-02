@@ -4,7 +4,7 @@ from cx_Freeze import setup, Executable
 # Define the base options for the setup
 options = {
     "build_exe": {
-        "include_files": ["NpasInSvcByLocRpt.csv"],
+        "include_files": ["NpasInSvcByLocRpt.csv", "help_utils.py"],
         "packages": ["os", "sys"],  # Replace with your package name
         "includes": ["csv", "ctypes", "re", "pyperclip", "tkinter"],  # List any additional modules you want to include
     }
@@ -13,7 +13,7 @@ options = {
 # List of executables
 executables = [
     Executable(
-        r"C:\Users\Bryan Edman\Documents\BryanStuff\NumberManipulator_GUI\NumberManipulatorGUI.py",  # Replace with the name of your main script
+        r"C:\Users\bryan\Documents\ReddSummitApps\NumberManipulator_GUI\NumberManipulatorGUI.py",  # Replace with the name of your main script
         base=None,  # Set this to None if you don't want a console window
         #targetName="NumberManipulator.exe",  # Name of the generated executable
     )

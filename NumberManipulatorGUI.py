@@ -1,13 +1,17 @@
 import tkinter as tk
 from tkinter import *
+
 import pyperclip
 import re
 import ctypes
 import csv
+from help_utils import *
 
 # CSV file path
 csvAreaCodes = r"NpasInSvcByLocRpt.csv"
-
+feedNums = []
+current_index = 0
+cycled = True
 
 def extractAreaCode(number):
     return number[:3]
@@ -48,7 +52,7 @@ def statesByCodes(areaCodes):
         return states
 
 
-def remove_duplicates_preserve_order(numbers):
+def rm_duplicates_in_order(numbers):
     unique_numbers = []
     seen_numbers = set()
 
@@ -117,6 +121,7 @@ def badNumDel(arg):
 
 
 def deDupe(arg):
+    global current_index, feedNums, cycled
     input_text = inEntryDeDup.get("1.0", "end-1c")
     lines = input_text.split("\n")
 
@@ -129,7 +134,13 @@ def deDupe(arg):
         numbers = line.split()
         cleanNums.extend(numbers)
 
-    uniqNums = remove_duplicates_preserve_order(cleanNums)
+    uniqNums = rm_duplicates_in_order(cleanNums)
+
+    #globals to deal with feeding numbers to clipboard
+    cycled = False
+    feedNums = uniqNums
+    current_index = 0
+
     # check states here for area code possibilities
     # Iterate through the list of phone numbers and find the regions
     allAreaCodes = []
@@ -145,26 +156,80 @@ def deDupe(arg):
     posStates = " ".join(f"{st}, " for st in possibleStates)
     possibleStatesLbl.config(text=("Possible States: " + posStates))
 
+    outPut = format_hyphen(uniqNums)
 
+    # copy the formatted list to the clipboard
+    copy_formatted_list(outPut)
 
-
-
-
-    outPut = "\n".join(f"{num} - " for num in uniqNums)
-
-    pyperclip.copy(outPut)
-    # try to make auto minimize only happen when check box is clicked
+    # make auto minimize only happen when check box is clicked
     if onOff.get() == 1:
         root.wm_state("iconic")
+
+
+def format_hyphen(nums):
+    return "\n".join(f"{num} - " for num in nums)
+
+def format_newline(nums):
+    return "\n".join(f"{num}" for num in nums)
+
+def copy_formatted_list(outPut):
+    if outPut:
+        pyperclip.copy(outPut)
+
+
+def full_list_to_clipboard(arg):
+    global feedNums
+    if len(feedNums) > 0:
+        pyperclip.copy(format_newline(feedNums))
+
+
+def feed_next_number(arg):
+    global current_index, feedNums, cycled
+    if not cycled and current_index < len(feedNums):
+        pyperclip.copy(feedNums[current_index])
+        current_index += 1
+    else:
+        current_index = 0
+        cycled = True
+        pyperclip.copy('')
+
+# Help window
+def show_instructions():
+    help_window = tk.Toplevel(root)
+    create_instructions_notebook(help_window)
+
+def show_hotkeys():
+    hotkey_window = tk.Toplevel(root)
+    create_hotkeys_notebook(hotkey_window)
 
 
 # Create the main window
 root = tk.Tk()
 root.title("NumberManipulator GUI")
 
+# binding for number feed
+root.bind('<Control-f>', feed_next_number)
+
+# binding for control + f + a to feed all numbers
+root.bind('<Control-Shift-F>', full_list_to_clipboard)
+
+# Create a menu bar
+menu_bar = tk.Menu(root)
+
+# Create a "Help" menu
+help_menu = tk.Menu(menu_bar)
+help_menu.add_command(label="Instructions", command=show_instructions)
+help_menu.add_command(label="HotKeys", command=show_hotkeys)
+menu_bar.add_cascade(label="Help", menu=help_menu)
+
+# Configure the root window to use the menu bar
+root.config(menu=menu_bar)
+
+
 # Text input field for Area Code Checker
-inLabelAreaCode = tk.Label(root, text="Enter an Area Code to check what State it's from.")
-inLabelAreaCode.pack(padx=5, pady=2)
+inLabelAreaCode = tk.Label(root, text="Check Area Code")
+inLabelAreaCode.pack(padx=10, pady=2)
+
 
 inEntryAreaCode = tk.Text(root, height=1)
 inEntryAreaCode.bind("<Return>", stateByAreaCode)
@@ -172,25 +237,26 @@ inEntryAreaCode.pack(fill=BOTH, expand=YES, padx=5, pady=5)
 outLabelAreaCode = tk.Label(root)
 outLabelAreaCode.pack(fill=BOTH, expand=YES, padx=5, pady=5)
 # Text input field for DeDupe
-inLabelDeDup = tk.Label(root, text="DeDupe - Enter the list of numbers separated by spaces:")
+inLabelDeDup = tk.Label(root, text="DeDupe")
 inLabelDeDup.pack(padx=5, pady=2)
 
 inEntryDeDup = tk.Text(root, height=10)
 inEntryDeDup.bind("<Return>", deDupe)
-inEntryDeDup.pack(fill=BOTH, expand=YES, padx=5, pady=5)
+inEntryDeDup.pack(fill=BOTH, expand=YES, padx=10, pady=5)
 
 #Label to display all possible states with area codes from DeDup
 possibleStatesLbl = tk.Label(root)
-possibleStatesLbl.pack(fill=BOTH, expand=YES, padx=5, pady=5)
+possibleStatesLbl.pack(fill=BOTH, expand=YES, padx=10, pady=5)
 
 
 # Text input field for bad number Deleter
-inLabelDelete = tk.Label(root, text="Bad Number Deleter - Enter Numbers with Notes")
-inLabelDelete.pack(padx=5, pady=2)
+inLabelDelete = tk.Label(root, text="Clean Numbers")
+inLabelDelete.pack(padx=10, pady=2)
 
 inEntryDelete = tk.Text(root, height=10)
 inEntryDelete.bind("<Return>", badNumDel)
-inEntryDelete.pack(fill=BOTH, expand=YES, padx=5, pady=5)
+inEntryDelete.pack(fill=BOTH, expand=YES, padx=10, pady=5)
+
 
 
 # make a check box to turn auto minimizing on and off
@@ -198,11 +264,12 @@ onOff = tk.IntVar()
 autoMin = tk.Checkbutton(
     root, text="Auto Minimize ON/OFF", variable=onOff, onvalue=1, offvalue=0
 )
+
 autoMin.pack(fill=BOTH, expand=YES, padx=2, pady=1)
 
 # Create an exit button
 exitBtn = tk.Button(root, text="Exit", height=2, width=30, command=root.destroy)
-exitBtn.pack(expand=YES, padx=5, pady=1)
+exitBtn.pack(expand=YES, padx=5, pady=5)
 
 # auto minimized the console window to make things even more efficient
 ctypes.windll.user32.ShowWindow(
