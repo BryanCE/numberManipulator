@@ -13,7 +13,7 @@ options = {
 # List of executables
 executables = [
     Executable(
-        r"C:\Users\Bryan Edman\Documents\BryanStuff\NumberManipulator_GUI\NumberManipulatorGUI.py",  # Replace with the name of your main script
+        r"C:\Users\bryan\Documents\ReddSummitApps\NumberManipulator_GUI\NumberManipulatorGUI.py",  # Replace with the name of your main script
         base=None,  # Set this to None if you don't want a console window
         #targetName="NumberManipulator.exe",  # Name of the generated executable
     )

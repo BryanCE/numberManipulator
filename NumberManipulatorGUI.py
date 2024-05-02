@@ -117,6 +117,7 @@ def badNumDel(arg):
 
 
 def deDupe(arg):
+    global uniqNums, current_index, formatted_unique_numbers
     input_text = inEntryDeDup.get("1.0", "end-1c")
     lines = input_text.split("\n")
 
@@ -130,6 +131,10 @@ def deDupe(arg):
         cleanNums.extend(numbers)
 
     uniqNums = remove_duplicates_preserve_order(cleanNums)
+    current_index = 0
+
+    formatted_unique_numbers = "\n".join(f"{num}" for num in uniqNums)
+
     # check states here for area code possibilities
     # Iterate through the list of phone numbers and find the regions
     allAreaCodes = []
@@ -146,7 +151,16 @@ def deDupe(arg):
     possibleStatesLbl.config(text=("Possible States: " + posStates))
 
 
+def copy_formatted_list():
+    pyperclip.copy(formatted_unique_numbers)
 
+def copy_next_number(event=None):
+    global current_index
+    if current_index < len(uniqNums):
+        pyperclip.copy(uniqNums[current_index])
+        current_index += 1
+    else:
+        pyperclip.copy('')  # Clear the clipboard if no more numbers
 
 
 
@@ -161,6 +175,8 @@ def deDupe(arg):
 # Create the main window
 root = tk.Tk()
 root.title("NumberManipulator GUI")
+
+
 
 # Text input field for Area Code Checker
 inLabelAreaCode = tk.Label(root, text="Enter an Area Code to check what State it's from.")
@@ -193,6 +209,7 @@ inEntryDelete.bind("<Return>", badNumDel)
 inEntryDelete.pack(fill=BOTH, expand=YES, padx=5, pady=5)
 
 
+
 # make a check box to turn auto minimizing on and off
 onOff = tk.IntVar()
 autoMin = tk.Checkbutton(
@@ -200,9 +217,13 @@ autoMin = tk.Checkbutton(
 )
 autoMin.pack(fill=BOTH, expand=YES, padx=2, pady=1)
 
+# Button to copy formatted list to clipboard
+copyListBtn = tk.Button(root, text="Copy Formatted List", height=2, width=30, command=copy_formatted_list)
+copyListBtn.pack( expand=YES, padx=5, pady=5)
+
 # Create an exit button
 exitBtn = tk.Button(root, text="Exit", height=2, width=30, command=root.destroy)
-exitBtn.pack(expand=YES, padx=5, pady=1)
+exitBtn.pack(expand=YES, padx=5, pady=5)
 
 # auto minimized the console window to make things even more efficient
 ctypes.windll.user32.ShowWindow(
