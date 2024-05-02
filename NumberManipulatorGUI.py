@@ -156,7 +156,7 @@ def deDupe(arg):
     posStates = " ".join(f"{st}, " for st in possibleStates)
     possibleStatesLbl.config(text=("Possible States: " + posStates))
 
-    outPut = "\n".join(f"{num} - " for num in uniqNums)
+    outPut = format_hyphen(uniqNums)
 
     # copy the formatted list to the clipboard
     copy_formatted_list(outPut)
@@ -166,6 +166,12 @@ def deDupe(arg):
         root.wm_state("iconic")
 
 
+def format_hyphen(nums):
+    return "\n".join(f"{num} - " for num in nums)
+
+def format_newline(nums):
+    return "\n".join(f"{num}" for num in nums)
+
 def copy_formatted_list(outPut):
     if outPut:
         pyperclip.copy(outPut)
@@ -173,7 +179,8 @@ def copy_formatted_list(outPut):
 
 def full_list_to_clipboard(arg):
     global feedNums
-    pyperclip.copy(feedNums)
+    if len(feedNums) > 0:
+        pyperclip.copy(format_newline(feedNums))
 
 
 def feed_next_number(arg):
@@ -204,7 +211,7 @@ root.title("NumberManipulator GUI")
 root.bind('<Control-f>', feed_next_number)
 
 # binding for control + f + a to feed all numbers
-root.bind('<Control-Shift-f>', full_list_to_clipboard)
+root.bind('<Control-Shift-F>', full_list_to_clipboard)
 
 # Create a menu bar
 menu_bar = tk.Menu(root)
