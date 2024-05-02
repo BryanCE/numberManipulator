@@ -13,7 +13,8 @@ def get_help_data():
 
 def get_hotkey_data():
     hotkey_data = [
-        ("Control + f", "Feeding Numbers to Clipboard:\n\nAfter pasting numbers into DeDupe, all the numbers will be formatted and ready to be pasted into your notes.\n\nWhen ready to dial numbers, you can Press Control+f to feed one phone number at a time to your clipboard.\n\nIf needed you can paste this single number multiple times, when you want the next number fed, simply press Control+f again.\n\nThe next time you press Control+v the next number will be pasted."),
+        ("Control + f", "Feeding Individual Numbers to Clipboard:\n\nAfter pasting numbers into DeDupe, all the numbers will be formatted and ready to be pasted into your notes.\n\nWhen ready to dial numbers, you can Press Control+f to feed one phone number at a time to your clipboard.\n\nIf needed you can paste this single number multiple times, when you want the next number fed, simply press Control+f again.\n\nThe next time you press Control+v the next number will be pasted."),
+        ("Control + Shift + F", "Feeding All Numbers to Clipboard:\n\nIf at any time you want to feed all the numbers to your clipboard at once, you can press Control+Shift+F. This loads the clipboard with all the original numbers, making them ready to paste.\n\nKeep in mind this is the original list containing numbers you may have called that were wrong or bad.\n\nIf wrong or bad numbers need to be removed, paste your numbers with notes into the Clean Numbers input.\n\nThis is useful if when you're ready to move to another list of numbers and want to paste all the original numbers back into Salesforce or another CRM."),
     ]
     return hotkey_data
 
