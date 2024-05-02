@@ -117,7 +117,7 @@ def badNumDel(arg):
 
 
 def deDupe(arg):
-    global uniqNums, current_index, formatted_unique_numbers
+    global uniqNums, current_index, outPut
     input_text = inEntryDeDup.get("1.0", "end-1c")
     lines = input_text.split("\n")
 
@@ -132,8 +132,6 @@ def deDupe(arg):
 
     uniqNums = remove_duplicates_preserve_order(cleanNums)
     current_index = 0
-
-    formatted_unique_numbers = "\n".join(f"{num}" for num in uniqNums)
 
     # check states here for area code possibilities
     # Iterate through the list of phone numbers and find the regions
@@ -150,9 +148,23 @@ def deDupe(arg):
     posStates = " ".join(f"{st}, " for st in possibleStates)
     possibleStatesLbl.config(text=("Possible States: " + posStates))
 
+    outPut = "\n".join(f"{num} - " for num in uniqNums)
+
+    pyperclip.copy(outPut)
+    # try to make auto minimize only happen when check box is clicked
+    if onOff.get() == 1:
+        root.wm_state("iconic")
+
+
+    outPut = "\n".join(f"{num} - " for num in uniqNums)
+
+    pyperclip.copy(outPut)
+    # try to make auto minimize only happen when check box is clicked
+    if onOff.get() == 1:
+        root.wm_state("iconic")
 
 def copy_formatted_list():
-    pyperclip.copy(formatted_unique_numbers)
+    pyperclip.copy(outPut)
 
 def copy_next_number(event=None):
     global current_index
@@ -163,19 +175,11 @@ def copy_next_number(event=None):
         pyperclip.copy('')  # Clear the clipboard if no more numbers
 
 
-
-    outPut = "\n".join(f"{num} - " for num in uniqNums)
-
-    pyperclip.copy(outPut)
-    # try to make auto minimize only happen when check box is clicked
-    if onOff.get() == 1:
-        root.wm_state("iconic")
-
-
 # Create the main window
 root = tk.Tk()
 root.title("NumberManipulator GUI")
 
+root.bind('<Control-n>', copy_next_number)
 
 
 # Text input field for Area Code Checker
