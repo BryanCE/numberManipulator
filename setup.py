@@ -4,7 +4,7 @@ from cx_Freeze import setup, Executable
 # Define the base options for the setup
 options = {
     "build_exe": {
-        "include_files": ["NpasInSvcByLocRpt.csv"],
+        "include_files": ["NpasInSvcByLocRpt.csv", "help_utils.py"],
         "packages": ["os", "sys"],  # Replace with your package name
         "includes": ["csv", "ctypes", "re", "pyperclip", "tkinter"],  # List any additional modules you want to include
     }
