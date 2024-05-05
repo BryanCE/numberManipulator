@@ -1,13 +1,10 @@
 import tkinter as tk
 from tkinter import *
-import pyperclip
-import re
 import ctypes
 from help_utils import *
 from areaCodes import stateByAreaCode
 from dedupe import deDupe, feed_next_number, full_list_to_clipboard
 from badnumdel import badNumDel
-
 
 
 def on_return(event):
@@ -16,10 +13,6 @@ def on_return(event):
     deDupe(inEntryDeDup, possibleStatesLbl, onOff, root)
     stateByAreaCode(inEntryAreaCode)
     return 'break'  # Prevents the default behavior of the Enter key
-
-
-
-
 
 # Help window
 def show_instructions():
@@ -95,8 +88,6 @@ exitBtn = tk.Button(exitBtnFrame, text="Exit", height=2, width=30, command=root.
 exitBtn.pack(expand=True, fill="both")
 
 
-
-
 # inLabelAreaCode
 # inEntryAreaCode 
 # outLabelAreaCode 
@@ -106,8 +97,6 @@ inLabelAreaCode.grid(row=0, column=0, padx=10, pady=2, sticky="w")
 inEntryAreaCode.grid(row=0, column=1, padx=10, pady=5, sticky="w")
 autoMin.grid(row=0, column=2, columnspan=1, padx=(0, 30), pady=(0, 30), sticky="w")
 outLabelAreaCode.grid(row=1, column=0, columnspan=1, padx=5, pady=5, sticky="e")
-
-
 
 
 inLabelDeDup.grid(row=2, column=0, padx=10, pady=2, sticky="w")

@@ -1,5 +1,5 @@
 import pyperclip
-from areaCodes import extractAreaCode, statesByCodes
+from areaCodes import statesByCodes
 from chars import remove_chars, rm_duplicates_in_order
 
 #globals for number feeding
@@ -54,6 +54,8 @@ def deDupe(inEntryDeDup, possibleStatesLbl, onOff, root):
         if onOff.get() == 1:
             root.wm_state("iconic")
 
+def extractAreaCode(number):
+    return number[:3]
 
 def format_hyphen(nums):
     return "\n".join(f"{num} - " for num in nums)

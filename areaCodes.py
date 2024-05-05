@@ -3,8 +3,7 @@ import csv
 # CSV file path
 csvAreaCodes = r"NpasInSvcByLocRpt.csv"
 
-def extractAreaCode(number):
-    return number[:3]
+
 
 # Function to check for a state based on an area code
 def stateByAreaCode(inEntryAreaCode):
@@ -13,6 +12,8 @@ def stateByAreaCode(inEntryAreaCode):
             csv_reader = csv.DictReader(csv_file)
             areaCode = inEntryAreaCode.get("1.0", "end-1c")
             areaCode = areaCode.replace("\n", "").strip()
+            if len(areaCode) > 3:
+                areaCode = areaCode[:3]
             state = ""
             for row in csv_reader:
                 if row['NPA'] == areaCode:
