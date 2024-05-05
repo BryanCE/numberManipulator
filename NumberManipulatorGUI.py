@@ -225,17 +225,16 @@ menu_bar.add_cascade(label="Help", menu=help_menu)
 # Configure the root window to use the menu bar
 root.config(menu=menu_bar)
 
+# frame for area code and auto minimize check box
+areaCodeAndMinFrame = tk.Frame(root)
 
 # Text input field for Area Code Checker
-inLabelAreaCode = tk.Label(root, text="Check Area Code")
-#inLabelAreaCode.pack(padx=10, pady=2)
-
-
-inEntryAreaCode = tk.Text(root, height=1, width=20)
+inLabelAreaCode = tk.Label(areaCodeAndMinFrame, text="Check Area Code")
+inEntryAreaCode = tk.Text(areaCodeAndMinFrame, height=1, width=20)
 inEntryAreaCode.bind("<Return>", stateByAreaCode)
-#inEntryAreaCode.pack(fill=BOTH, expand=YES, padx=5, pady=5)
-outLabelAreaCode = tk.Label(root)
-#outLabelAreaCode.pack(fill=BOTH, expand=YES, padx=5, pady=5)
+outLabelAreaCode = tk.Label(areaCodeAndMinFrame)
+
+
 # Text input field for DeDupe
 inLabelDeDup = tk.Label(root, text="DeDupe")
 #inLabelDeDup.pack(padx=5, pady=2)
@@ -267,6 +266,7 @@ autoMin = tk.Checkbutton(
 
 #autoMin.pack(fill=BOTH, expand=YES, padx=2, pady=1)
 
+
 # Create a frame to contain the button
 exitBtnFrame = tk.Frame(root)
 exitBtn = tk.Button(exitBtnFrame, text="Exit", height=2, width=30, command=root.destroy)
@@ -279,11 +279,13 @@ ctypes.windll.user32.ShowWindow(
 # info on .ShowWindow here:
 # https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow?redirectedfrom=MSDN
 
+#Frame to hold the area code and auto minimize check box
+areaCodeAndMinFrame.grid(row=0, column=0, columnspan=2, pady=5)
 
 # Layout using grid
 inLabelAreaCode.grid(row=0, column=0, padx=10, pady=2, sticky="w")
 inEntryAreaCode.grid(row=0, column=1, padx=10, pady=5, sticky="w")
-autoMin.grid(row=0, column=1, columnspan=1, padx=(0, 30), pady=1, sticky="e")
+autoMin.grid(row=0, column=1, columnspan=1, padx=(0, 30), pady=1, sticky="w")
 
 
 outLabelAreaCode.grid(row=1, column=0, columnspan=2, padx=5, pady=5, sticky="ew")
