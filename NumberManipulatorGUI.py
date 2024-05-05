@@ -228,34 +228,34 @@ root.config(menu=menu_bar)
 
 # Text input field for Area Code Checker
 inLabelAreaCode = tk.Label(root, text="Check Area Code")
-inLabelAreaCode.pack(padx=10, pady=2)
+#inLabelAreaCode.pack(padx=10, pady=2)
 
 
-inEntryAreaCode = tk.Text(root, height=1)
+inEntryAreaCode = tk.Text(root, height=1, width=20)
 inEntryAreaCode.bind("<Return>", stateByAreaCode)
-inEntryAreaCode.pack(fill=BOTH, expand=YES, padx=5, pady=5)
+#inEntryAreaCode.pack(fill=BOTH, expand=YES, padx=5, pady=5)
 outLabelAreaCode = tk.Label(root)
-outLabelAreaCode.pack(fill=BOTH, expand=YES, padx=5, pady=5)
+#outLabelAreaCode.pack(fill=BOTH, expand=YES, padx=5, pady=5)
 # Text input field for DeDupe
 inLabelDeDup = tk.Label(root, text="DeDupe")
-inLabelDeDup.pack(padx=5, pady=2)
+#inLabelDeDup.pack(padx=5, pady=2)
 
 inEntryDeDup = tk.Text(root, height=10)
 inEntryDeDup.bind("<Return>", deDupe)
-inEntryDeDup.pack(fill=BOTH, expand=YES, padx=10, pady=5)
+#inEntryDeDup.pack(fill=BOTH, expand=YES, padx=10, pady=5)
 
 #Label to display all possible states with area codes from DeDup
 possibleStatesLbl = tk.Label(root)
-possibleStatesLbl.pack(fill=BOTH, expand=YES, padx=10, pady=5)
+#possibleStatesLbl.pack(fill=BOTH, expand=YES, padx=10, pady=5)
 
 
 # Text input field for bad number Deleter
 inLabelDelete = tk.Label(root, text="Clean Numbers")
-inLabelDelete.pack(padx=10, pady=2)
+#inLabelDelete.pack(padx=10, pady=2)
 
 inEntryDelete = tk.Text(root, height=10)
 inEntryDelete.bind("<Return>", badNumDel)
-inEntryDelete.pack(fill=BOTH, expand=YES, padx=10, pady=5)
+#inEntryDelete.pack(fill=BOTH, expand=YES, padx=10, pady=5)
 
 
 
@@ -265,17 +265,51 @@ autoMin = tk.Checkbutton(
     root, text="Auto Minimize ON/OFF", variable=onOff, onvalue=1, offvalue=0
 )
 
-autoMin.pack(fill=BOTH, expand=YES, padx=2, pady=1)
+#autoMin.pack(fill=BOTH, expand=YES, padx=2, pady=1)
 
-# Create an exit button
-exitBtn = tk.Button(root, text="Exit", height=2, width=30, command=root.destroy)
-exitBtn.pack(expand=YES, padx=5, pady=5)
+# Create a frame to contain the button
+exitBtnFrame = tk.Frame(root)
+exitBtn = tk.Button(exitBtnFrame, text="Exit", height=2, width=30, command=root.destroy)
+exitBtn.pack(expand=True, fill="both")
 
-# auto minimized the console window to make things even more efficient
+# auto minimized the console window
 ctypes.windll.user32.ShowWindow(
     ctypes.windll.kernel32.GetConsoleWindow(), 6
 )  # 6 = SW_MINIMIZE
 # info on .ShowWindow here:
 # https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow?redirectedfrom=MSDN
+
+
+# Layout using grid
+inLabelAreaCode.grid(row=0, column=0, padx=10, pady=2, sticky="w")
+inEntryAreaCode.grid(row=0, column=1, padx=10, pady=5, sticky="w")
+autoMin.grid(row=0, column=1, columnspan=1, padx=(0, 30), pady=1, sticky="e")
+
+
+outLabelAreaCode.grid(row=1, column=0, columnspan=2, padx=5, pady=5, sticky="ew")
+
+inLabelDeDup.grid(row=2, column=0, padx=10, pady=2, sticky="w")
+inEntryDeDup.grid(row=2, column=1, padx=10, pady=5, sticky="ew")
+possibleStatesLbl.grid(row=3, column=0, columnspan=2, padx=10, pady=5, sticky="ew")
+
+inLabelDelete.grid(row=4, column=0, padx=10, pady=2, sticky="w")
+inEntryDelete.grid(row=4, column=1, padx=10, pady=5, sticky="ew")
+
+
+#exitBtn.grid(row=6, column=0, columnspan=2, padx=5, pady=5, sticky="ew")
+
+exitBtnFrame.grid(row=6, column=0, columnspan=2, pady=10)
+
+
+# Configure column and row weights for resizing
+#root.grid_columnconfigure(0, weight=1)
+root.grid_columnconfigure(1, weight=1)
+#root.grid_rowconfigure(0, weight=2)
+root.grid_rowconfigure(1, weight=1)
+root.grid_rowconfigure(2, weight=1)
+root.grid_rowconfigure(3, weight=1)
+root.grid_rowconfigure(4, weight=1)
+root.grid_rowconfigure(5, weight=1)
+root.grid_rowconfigure(6, weight=1)
 
 root.mainloop()
