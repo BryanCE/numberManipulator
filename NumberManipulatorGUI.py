@@ -122,7 +122,6 @@ root.grid_rowconfigure(5, weight=1)
 root.grid_rowconfigure(6, weight=1)
 
 
-
 # auto minimized the console window
 ctypes.windll.user32.ShowWindow(
     ctypes.windll.kernel32.GetConsoleWindow(), 6
