@@ -2,6 +2,12 @@ import pyperclip
 from areaCodes import extractAreaCode, statesByCodes
 from chars import remove_chars, rm_duplicates_in_order
 
+#globals for number feeding
+feedNums = []
+current_index = 0
+cycled = True
+
+
 def deDupe(inEntryDeDup, possibleStatesLbl, onOff, root):
     if inEntryDeDup.get("1.0", "end-1c") != "":
         global current_index, feedNums, cycled
@@ -60,3 +66,18 @@ def copy_formatted_list(outPut):
         pyperclip.copy(outPut)
 
 
+def full_list_to_clipboard(arg):
+    global feedNums
+    if len(feedNums) > 0:
+        pyperclip.copy(format_newline(feedNums))
+
+
+def feed_next_number(arg):
+    global current_index, feedNums, cycled
+    if not cycled and current_index < len(feedNums):
+        pyperclip.copy(feedNums[current_index])
+        current_index += 1
+    else:
+        current_index = 0
+        cycled = True
+        pyperclip.copy('')

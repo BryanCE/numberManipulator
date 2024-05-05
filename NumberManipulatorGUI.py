@@ -5,13 +5,10 @@ import re
 import ctypes
 from help_utils import *
 from areaCodes import stateByAreaCode
-from dedupe import deDupe, format_newline
+from dedupe import deDupe, feed_next_number, full_list_to_clipboard
 from badnumdel import badNumDel
 
-#globals for number feeding
-feedNums = []
-current_index = 0
-cycled = True
+
 
 def on_return(event):
     # Call your function to process the area code
@@ -22,21 +19,7 @@ def on_return(event):
 
 
 
-def full_list_to_clipboard(arg):
-    global feedNums
-    if len(feedNums) > 0:
-        pyperclip.copy(format_newline(feedNums))
 
-
-def feed_next_number(arg):
-    global current_index, feedNums, cycled
-    if not cycled and current_index < len(feedNums):
-        pyperclip.copy(feedNums[current_index])
-        current_index += 1
-    else:
-        current_index = 0
-        cycled = True
-        pyperclip.copy('')
 
 # Help window
 def show_instructions():
