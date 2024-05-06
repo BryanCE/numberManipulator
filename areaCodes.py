@@ -3,8 +3,6 @@ import csv
 # CSV file path
 csvAreaCodes = r"NpasInSvcByLocRpt.csv"
 
-
-
 # Function to check for a state based on an area code
 def stateByAreaCode(inEntryAreaCode):
     if inEntryAreaCode.get("1.0", "end-1c") != "":
