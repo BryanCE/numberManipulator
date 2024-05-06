@@ -5,14 +5,21 @@ from help_utils import *
 from areaCodes import stateByAreaCode
 from dedupe import deDupe, feed_next_number, full_list_to_clipboard
 from badnumdel import badNumDel
+from google import googleSearch, displaySearchResults
 
+googleResults = []
 
 def on_return(event):
+    global googleResults 
     # Call your function to process the area code
     badNumDel(inEntryDelete, onOff, root)
     deDupe(inEntryDeDup, possibleStatesLbl, onOff, root)
     stateByAreaCode(inEntryAreaCode)
+    googleResults = googleSearch(inGoogleText)
     return 'break'  # Prevents the default behavior of the Enter key
+
+
+
 
 # Help window
 def show_instructions():
@@ -45,6 +52,16 @@ menu_bar.add_cascade(label="Help", menu=help_menu)
 
 # Configure the root window to use the menu bar
 root.config(menu=menu_bar)
+
+# Create a frame to hold the Google search input and button
+google_frame = tk.Frame(root)
+inGoogleLbl = tk.Label(google_frame, text="Google Search")
+inGoogleText = tk.Text(google_frame, height=1, width=30)
+inGoogleText.bind("<Return>", on_return)
+outGoogleBtn = tk.Button(google_frame, text=" See Results", command=lambda: displaySearchResults(root, googleResults))
+inGoogleLbl.grid(row=0, column=0, padx=10, pady=2, sticky="w")
+inGoogleText.grid(row=0, column=1, padx=10, pady=5, sticky="w")
+outGoogleBtn.grid(row=1, column=0, columnspan=2, padx=(10,10), pady=5, sticky="e")
 
 # frame for area code and auto minimize check box
 areaCodeAndMinFrame = tk.Frame(root)
@@ -107,8 +124,9 @@ inLabelDelete.grid(row=4, column=0, padx=10, pady=2, sticky="w")
 inEntryDelete.grid(row=4, column=1, padx=10, columnspan=3, pady=5, sticky="ew")
 
 #Frame to hold the area code and auto minimize check box
-areaCodeAndMinFrame.grid(row=0, column=0, columnspan=3, pady=5, sticky="ew")
+areaCodeAndMinFrame.grid(row=1, column=0, columnspan=3, pady=5, sticky="ew")
 exitBtnFrame.grid(row=6, column=0, columnspan=3, pady=10)
+google_frame.grid(row=0, column=0, columnspan=3, pady=5, sticky="ew")
 
 
 # Configure column and row weights for resizing
