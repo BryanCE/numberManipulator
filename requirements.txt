@@ -1,0 +1,4 @@
+googlesearch-python  # For Google search functionality
+pyperclip     # For clipboard operations
+requests      # For making HTTP requests
+cx_Freeze     # For creating executables
